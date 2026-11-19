@@ -10,6 +10,8 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 
 import java.util.List;
 
@@ -42,6 +44,16 @@ public class GlobalExceptionHandler {
                                                     HttpServletRequest req) {
         log.warn("Data integrity violation on {}", req.getRequestURI(), ex);
         return build(HttpStatus.CONFLICT, "Request conflicts with existing data", req, null);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleDenied(AccessDeniedException ex, HttpServletRequest req) {
+        return build(HttpStatus.FORBIDDEN, "You do not have permission to access this resource", req, null);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuth(AuthenticationException ex, HttpServletRequest req) {
+        return build(HttpStatus.UNAUTHORIZED, "Authentication required", req, null);
     }
 
     @ExceptionHandler(Exception.class)
