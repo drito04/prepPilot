@@ -50,14 +50,21 @@ Final year team project, <college name>, batch of 2026.
 
 ## Getting started
 
-> Coming soon. The goal is to start every service with one command:
->
-> ```bash
-> docker compose up
-> ```
+## Run everything
 
-1. Copy `.env.example` to `.env` and fill in the values.
-2. Run `docker compose up`.
+1. Install Docker Desktop
+2. `cp .env.example .env`
+3. `docker compose up --build`
+4. Open http://localhost
+
+| URL                          | What                |
+| ---------------------------- | ------------------- |
+| http://localhost             | App (through Nginx) |
+| http://localhost/api/health  | Core service        |
+| http://localhost:4000/health | Realtime service    |
+| http://localhost:8000/health | ML service          |
+
+Stop: `docker compose down`. Stop and wipe the database: `docker compose down -v`.
 
 ## Branching and workflow
 
