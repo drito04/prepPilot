@@ -22,6 +22,17 @@ services:
 
   core-service:
     build: ./core-service
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/yourdb
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRY_SECONDS: ${JWT_EXPIRY_SECONDS:-7200}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-} # new
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-} # new
+      SEED_INTERVIEWER_EMAIL: ${SEED_INTERVIEWER_EMAIL:-} # new
+      SEED_INTERVIEWER_PASSWORD: ${SEED_INTERVIEWER_PASSWORD:-}
     ports:
       - "8080:8080"
     depends_on:

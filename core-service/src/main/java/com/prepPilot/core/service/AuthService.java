@@ -24,22 +24,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserService userService;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
-        String email = request.email().trim().toLowerCase();
-
-        if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new ApiException(HttpStatus.CONFLICT, "Email is already registered");
-        }
-
-        User user = new User();
-        user.setEmail(email);
-        user.setFullName(request.fullName().trim());
-        user.setPasswordHash(passwordEncoder.encode(request.password()));
-        user.setRole(Role.STUDENT);
-
-        return UserResponse.from(userRepository.saveAndFlush(user));
+        User user = userService.create(
+                request.fullName(), request.email(), request.password(), Role.STUDENT);
+        return UserResponse.from(user);
     }
 
     @Transactional(readOnly = true)
