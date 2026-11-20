@@ -33,6 +33,13 @@ services:
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-} # new
       SEED_INTERVIEWER_EMAIL: ${SEED_INTERVIEWER_EMAIL:-} # new
       SEED_INTERVIEWER_PASSWORD: ${SEED_INTERVIEWER_PASSWORD:-}
+      MAIL_HOST: ${MAIL_HOST:-mailpit}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_FROM: ${MAIL_FROM:-no-reply@preppilot.local}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-false}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-false}
     ports:
       - "8080:8080"
     depends_on:
@@ -66,6 +73,12 @@ services:
       - core-service
       - realtime-service
       - frontend
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"   # SMTP, where the app sends mail
+      - "8025:8025"   # web inbox and API
 
 volumes:
   pgdata:
