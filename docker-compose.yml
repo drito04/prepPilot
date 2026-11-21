@@ -61,7 +61,19 @@ services:
       - "8000:8000"
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_PROXY_TARGET=http://core-service:8080
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - core-service
 
   nginx:
     image: nginx:alpine
@@ -77,8 +89,8 @@ services:
   mailpit:
     image: axllent/mailpit
     ports:
-      - "1025:1025"   # SMTP, where the app sends mail
-      - "8025:8025"   # web inbox and API
+      - "1025:1025" # SMTP, where the app sends mail
+      - "8025:8025" # web inbox and API
 
 volumes:
   pgdata:
