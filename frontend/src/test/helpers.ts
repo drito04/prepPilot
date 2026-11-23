@@ -1,5 +1,6 @@
 import type { LoginResponse, Role, User } from '../api/types';
 import { saveSession } from '../auth/storage';
+import type { Mock } from 'vitest';
 
 export function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -25,4 +26,9 @@ export function makeLoginResponse(role: Role = 'STUDENT'): LoginResponse {
 /** Puts a valid session in localStorage, as if the user had logged in earlier. */
 export function seedSession(role: Role = 'STUDENT'): void {
   saveSession({ token: 'test-token', expiresAt: Date.now() + 3_600_000, user: makeUser(role) });
+}
+
+/** The JSON body of the n-th call made to a mocked fetch. */
+export function sentJson(fetchMock: Mock, call = 0): unknown {
+  return JSON.parse((fetchMock.mock.calls[call][1] as RequestInit).body as string);
 }

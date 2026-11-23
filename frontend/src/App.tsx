@@ -7,6 +7,11 @@ import { RoleHome } from './components/RoleHome';
 import { ForbiddenPage } from './pages/ForbiddenPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { PublicOnly } from './auth/PublicOnly';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/VerifyEmailPage';
 
 function RootRedirect() {
   const { user } = useAuth();
@@ -18,6 +23,12 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route element={<PublicOnly />}>
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+      </Route>
       <Route path="/forbidden" element={<ForbiddenPage />} />
 
       <Route element={<RequireAuth roles={['STUDENT']} />}>

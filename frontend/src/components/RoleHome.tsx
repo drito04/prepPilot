@@ -24,7 +24,10 @@ export function RoleHome({ title, description }: RoleHomeProps) {
 
   return (
     <section className="space-y-4">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <div>
+        <h1 className="text-2xl font-semibold">{title}</h1>
+        <div className="mt-2 h-1 w-12 rounded-full bg-accent-500" />
+      </div>
       <p className="text-slate-600">Welcome, {user?.fullName}. {description}</p>
       <div className="space-y-2">
         <button

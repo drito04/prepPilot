@@ -1,0 +1,1 @@
+export const linkClass = 'font-medium text-brand-600 hover:text-accent-600 hover:underline';

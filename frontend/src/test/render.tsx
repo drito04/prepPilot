@@ -3,9 +3,11 @@ import type { ReactElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { AuthProvider } from '../auth/AuthProvider';
 
-export function renderAt(ui: ReactElement, path = '/') {
+type Entry = string | { pathname: string; state?: unknown };
+
+export function renderAt(ui: ReactElement, entry: Entry = '/') {
   return render(
-    <MemoryRouter initialEntries={[path]}>
+    <MemoryRouter initialEntries={[entry]}>
       <AuthProvider>{ui}</AuthProvider>
     </MemoryRouter>,
   );

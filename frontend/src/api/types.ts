@@ -29,3 +29,6 @@ export interface ApiErrorBody {
   path: string;
   details?: FieldDetail[];
 }
+export interface MessageResponse {
+  message: string;
+}
