@@ -1,0 +1,28 @@
+name: realtime-ci
+
+on:
+  pull_request:
+    paths:
+      - 'realtime-service/**'
+      - '.github/workflows/realtime-ci.yml'
+  push:
+    branches: [develop, main]
+    paths:
+      - 'realtime-service/**'
+      - '.github/workflows/realtime-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: realtime-service/package-lock.json
+      - run: npm ci
+      - run: npm test
