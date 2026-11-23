@@ -1,16 +1,32 @@
-# React + Vite
+# prepPilot Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + TypeScript single-page app (Vite, Tailwind CSS 4, React Router 7, Vitest).
 
-Currently, two official plugins are available:
+## Run in development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Start the backend stack first (`docker compose up -d` from the repo root), then:
 
-## React Compiler
+```
+npm install
+npm run dev     # http://localhost:5173
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Vite proxies `/api` and `/socket.io` to the gateway at http://localhost:8088,
+so the browser only ever sees one origin and there is no CORS to configure.
 
-## Expanding the Oxlint configuration
+## Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+`npm test` · `npm run lint` · `npm run build` · `npm run preview`
+
+## How auth works
+
+- `src/api/client.ts` attaches the token, parses the standard error shape into `ApiError`
+  and signs the user out when an authenticated call returns 401.
+- `src/auth/` holds the session (localStorage), the provider, the `useAuth` hook and the
+  route guards. The guards are for user experience only; the services enforce access.
+- The app signs out automatically when the token expires (no refresh tokens in v1).
+
+## In Docker
+
+The `frontend` service serves the built files with Nginx. The `gateway` service routes
+`/` to it, `/api` to core and `/socket.io` to realtime.
