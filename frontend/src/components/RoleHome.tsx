@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { fetchMe } from '../api/auth';
 import { ApiError } from '../api/client';
 import { useAuth } from '../auth/useAuth';
+import { PageTitle } from './PageTitle';
 
 interface RoleHomeProps {
   title: string;
   description: string;
+  children?: ReactNode;
 }
 
-export function RoleHome({ title, description }: RoleHomeProps) {
+export function RoleHome({ title, description, children }: RoleHomeProps) {
   const { user } = useAuth();
   const [status, setStatus] = useState<string | null>(null);
 
@@ -23,17 +25,14 @@ export function RoleHome({ title, description }: RoleHomeProps) {
   }
 
   return (
-    <section className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <div className="mt-2 h-1 w-12 rounded-full bg-accent-500" />
-      </div>
-      <p className="text-slate-600">Welcome, {user?.fullName}. {description}</p>
+    <section className="space-y-6">
+      <PageTitle title={title} description={`Welcome, ${user?.fullName}. ${description}`} />
+      {children}
       <div className="space-y-2">
         <button
           type="button"
           onClick={checkSession}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
         >
           Call /api/me
         </button>

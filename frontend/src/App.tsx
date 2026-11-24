@@ -1,14 +1,16 @@
-import { Navigate, Route, Routes } from 'react-router';
+import { Link, Navigate, Route, Routes } from 'react-router';
+import { PublicOnly } from './auth/PublicOnly';
 import { RequireAuth } from './auth/RequireAuth';
 import { homePathFor } from './auth/roles';
 import { useAuth } from './auth/useAuth';
 import { Layout } from './components/Layout';
+import { linkClass } from './components/linkStyles';
 import { RoleHome } from './components/RoleHome';
 import { ForbiddenPage } from './pages/ForbiddenPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { PublicOnly } from './auth/PublicOnly';
-import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
@@ -23,14 +25,17 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/login" element={<LoginPage />} />
+
       <Route element={<PublicOnly />}>
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Route>
+
       <Route path="/forbidden" element={<ForbiddenPage />} />
 
+      {/* Every signed-in page goes INSIDE its <Layout /> route, or it gets no header. */}
       <Route element={<RequireAuth roles={['STUDENT']} />}>
         <Route element={<Layout />}>
           <Route
@@ -39,9 +44,14 @@ export default function App() {
               <RoleHome
                 title="Student dashboard"
                 description="Exams, coding practice and interview scheduling will appear here."
-              />
+              >
+                <Link to="/student/profile" className={linkClass}>
+                  Complete your profile
+                </Link>
+              </RoleHome>
             }
           />
+          <Route path="/student/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 
